@@ -8,11 +8,17 @@
 
 #import "GameViewController.h"
 
+#import "FFMotion.h"
 #import "FFShip.h"
 
 @interface GameViewController () <SCNSceneRendererDelegate> {
+    
+    // Scene
     SCNScene *scene;
     SCNView *sceneView;
+    
+    // Controls
+    FFMotion *motion;
     
     // Game variables
     FFShip *ship;
@@ -35,6 +41,20 @@
     
     [self setupScene];
     [self setupGame];
+    [self setupControls];
+}
+
+- (void)setupControls {
+    motion = [FFMotion new];
+    
+    [motion startGeneratingMotionUpdatesHandler:^(float x) {
+        
+        if ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight) {
+            x = -x;
+        }
+        
+        ship.speed = CGVectorMake(ship.speed.dx + x / 100.f, ship.speed.dy);
+    }];
 }
 
 - (void)setupScene {
