@@ -25,6 +25,9 @@
     NSInteger forestWidth;
     BOOL gameOver;
     
+    // Color change
+    NSInteger colorChangeTick;
+    
     SCNNode *cameraNode;
     CGFloat camRotation;
     SCNNode *planeNode;
@@ -140,6 +143,11 @@
     
     while (trees.count < numTrees) {
         [self addTreeToPosition:SCNVector3Make([self randomSceneX], 0, -30)];
+    }
+    
+    colorChangeTick ++;
+    if (colorChangeTick > 500) {
+        colorChangeTick = 0;
     }
 }
 
