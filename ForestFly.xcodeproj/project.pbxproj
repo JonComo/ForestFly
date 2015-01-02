@@ -15,7 +15,6 @@
 		86FCEF781A561D5A00EDACC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86FCEF771A561D5A00EDACC7 /* Images.xcassets */; };
 		86FCEF7B1A561D5A00EDACC7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86FCEF791A561D5A00EDACC7 /* LaunchScreen.xib */; };
 		86FCEF871A561D5A00EDACC7 /* ForestFlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF861A561D5A00EDACC7 /* ForestFlyTests.m */; };
-		86FCEF951A562CD500EDACC7 /* FFShip.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF941A562CD500EDACC7 /* FFShip.m */; };
 		86FCEF9A1A562E6A00EDACC7 /* FFObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF991A562E6A00EDACC7 /* FFObject.m */; };
 		86FCEF9E1A56308B00EDACC7 /* FFMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF9D1A56308B00EDACC7 /* FFMotion.m */; };
 /* End PBXBuildFile section */
@@ -45,8 +44,6 @@
 		86FCEF801A561D5A00EDACC7 /* ForestFlyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ForestFlyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86FCEF851A561D5A00EDACC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		86FCEF861A561D5A00EDACC7 /* ForestFlyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ForestFlyTests.m; sourceTree = "<group>"; };
-		86FCEF931A562CD500EDACC7 /* FFShip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFShip.h; sourceTree = "<group>"; };
-		86FCEF941A562CD500EDACC7 /* FFShip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFShip.m; sourceTree = "<group>"; };
 		86FCEF981A562E6A00EDACC7 /* FFObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFObject.h; sourceTree = "<group>"; };
 		86FCEF991A562E6A00EDACC7 /* FFObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFObject.m; sourceTree = "<group>"; };
 		86FCEF9C1A56308B00EDACC7 /* FFMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMotion.h; sourceTree = "<group>"; };
@@ -138,8 +135,6 @@
 			children = (
 				86FCEF981A562E6A00EDACC7 /* FFObject.h */,
 				86FCEF991A562E6A00EDACC7 /* FFObject.m */,
-				86FCEF931A562CD500EDACC7 /* FFShip.h */,
-				86FCEF941A562CD500EDACC7 /* FFShip.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -259,7 +254,6 @@
 				86FCEF731A561D5A00EDACC7 /* GameViewController.m in Sources */,
 				86FCEF9E1A56308B00EDACC7 /* FFMotion.m in Sources */,
 				86FCEF6B1A561D5A00EDACC7 /* main.m in Sources */,
-				86FCEF951A562CD500EDACC7 /* FFShip.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

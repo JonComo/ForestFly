@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^MotionUpdate)(float x);
-
 @interface FFMotion : NSObject
 
--(void)startGeneratingMotionUpdatesHandler:(MotionUpdate)handler;
+@property (nonatomic, assign) float offset;
+
+-(void)startGeneratingMotionUpdates;
 -(void)stopGeneratingMotionUpdates;
 
 @end

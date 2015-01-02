@@ -9,6 +9,7 @@
 #import "FFMotion.h"
 
 @import CoreMotion;
+@import UIKit;
 
 @interface FFMotion () {
     CMMotionManager *manager;
@@ -18,24 +19,19 @@
 
 @implementation FFMotion
 
--(instancetype)init {
-    if (self = [super init]) {
-        //init
-        
-    }
-    
-    return self;
-}
-
--(void)startGeneratingMotionUpdatesHandler:(MotionUpdate)handler {
+-(void)startGeneratingMotionUpdates {
     if (!manager) {
         manager = [CMMotionManager new];
     }
     
+    __weak FFMotion *weakSelf = self;
     if (!manager.isAccelerometerActive) {
         [manager startAccelerometerUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
-            if (handler) {
-                handler(accelerometerData.acceleration.y);
+            
+            weakSelf.offset = accelerometerData.acceleration.y;
+            
+            if ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft) {
+                weakSelf.offset = -weakSelf.offset;
             }
         }];
     }

@@ -9,10 +9,8 @@
 #import "GameViewController.h"
 
 #import "FFMotion.h"
-#import "FFShip.h"
 
 @interface GameViewController () <SCNSceneRendererDelegate> {
-    
     // Scene
     SCNScene *scene;
     SCNView *sceneView;
@@ -21,12 +19,16 @@
     FFMotion *motion;
     
     // Game variables
-    FFShip *ship;
+    CGVector speed;
     NSMutableSet *trees;
     NSInteger numTrees;
     NSInteger forestWidth;
+    BOOL gameOver;
     
     SCNNode *cameraNode;
+    CGFloat camRotation;
+    SCNNode *planeNode;
+    SCNNode *lightNode;
     
     // Touch controls (debugging)
     CGPoint lastTouchPosition;
@@ -46,15 +48,7 @@
 
 - (void)setupControls {
     motion = [FFMotion new];
-    
-    [motion startGeneratingMotionUpdatesHandler:^(float x) {
-        
-        if ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight) {
-            x = -x;
-        }
-        
-        ship.speed = CGVectorMake(ship.speed.dx + x / 100.f, ship.speed.dy);
-    }];
+    [motion startGeneratingMotionUpdates];
 }
 
 - (void)setupScene {
@@ -65,10 +59,14 @@
     sceneView.delegate = self;
     
     // create and add a light to the scene
-    SCNNode *lightNode = [SCNNode node];
+    lightNode = [SCNNode node];
     lightNode.light = [SCNLight light];
-    lightNode.light.type = SCNLightTypeAmbient;
-    lightNode.position = SCNVector3Make(0, 10, 10);
+    lightNode.light.type = SCNLightTypeOmni;
+    lightNode.light.shadowColor = [UIColor blackColor];
+    
+    SCNAction *bob = [SCNAction moveByX:0 y:1 z:0 duration:1];
+    [lightNode runAction:[SCNAction repeatActionForever:bob]];
+    
     [scene.rootNode addChildNode:lightNode];
     
     // retrieve the SCNView
@@ -81,29 +79,67 @@
     scnView.showsStatistics = YES;
     
     // configure the view
-    scnView.backgroundColor = [UIColor blueColor];
+    scnView.backgroundColor = [UIColor colorWithRed:0 green:210.f/255.f blue:1.f alpha:1];
     
-    // Setup ship
-    ship = [FFShip new];
-    [scene.rootNode addChildNode:ship.node];
-    
-    // create and add a camera to the ship
+    // Create camera (ship)
     cameraNode = [SCNNode node];
     cameraNode.camera = [SCNCamera camera];
-    [ship.node addChildNode:cameraNode];
+    cameraNode.camera.xFov = 100;
+    cameraNode.camera.yFov = 100;
+    cameraNode.camera.zNear = 0.01;
+    [scene.rootNode addChildNode:cameraNode];
     
-    // place the camera
-    cameraNode.position = SCNVector3Make(0, 1, 4);
+    cameraNode.position = SCNVector3Make(0, 2, 1);
+    
+    // Setup ground plane
+    SCNPlane *plane = [SCNPlane planeWithWidth:1000 height:1000];
+    SCNMaterial *green = [SCNMaterial material];
+    green.diffuse.contents = [UIColor colorWithRed:30.f/255.f green:166.f/255.f blue:89.f/255.f alpha:1.f];
+    plane.materials = @[green];
+    planeNode = [SCNNode nodeWithGeometry:plane];
+    planeNode.pivot = SCNMatrix4MakeRotation(M_PI_2, 1, 0, 0);
+    
+    [scene.rootNode addChildNode:planeNode];
 }
 
 - (void)setupGame {
     // Configure Game variables
-    numTrees = 50;
-    forestWidth = 40;
+    numTrees = 100;
+    forestWidth = 200;
+    gameOver = NO;
+    speed = CGVectorMake(0.0, 0.1);
     
     while (trees.count < numTrees) {
-        SCNVector3 position = SCNVector3Make([self randomSceneX], 0, -60 + (float)(arc4random()%50));
+        SCNVector3 position = SCNVector3Make(round([self randomSceneX] / 2.f) * 2, 0, -60 + round((float)(arc4random()%50) / 2.f) * 2);
         [self addTreeToPosition:position];
+    }
+}
+
+#pragma mark SCNSceneRendererDelegate
+
+-(void)renderer:(id<SCNSceneRenderer>)aRenderer willRenderScene:(SCNScene *)scene atTime:(NSTimeInterval)time {
+    if (gameOver) {
+        return;
+    }
+    
+    speed = CGVectorMake((speed.dx - motion.offset) * 0.7f, speed.dy + 0.0001);
+    
+    cameraNode.position = SCNVector3Make(cameraNode.position.x + speed.dx, cameraNode.position.y, cameraNode.position.z);
+    camRotation -= (camRotation - speed.dx) / 20.0f;
+    cameraNode.pivot = SCNMatrix4MakeRotation(camRotation, 0, 0, 0.2f);
+    
+    planeNode.position = SCNVector3Make(cameraNode.position.x, 0, 0);
+    lightNode.position = SCNVector3Make(cameraNode.position.x, 10, 10);
+    
+    // Tree updates
+    [self updateTrees];
+    
+    if ([self hitTree]) {
+        gameOver = YES;
+    }
+    
+    while (trees.count < numTrees) {
+        [self addTreeToPosition:SCNVector3Make([self randomSceneX], 0, -30)];
     }
 }
 
@@ -112,16 +148,21 @@
         trees = [NSMutableSet set];
     }
     
-    SCNPyramid *pyramid = [SCNPyramid pyramidWithWidth:1 height:1 length:1];
+    SCNPyramid *pyramid = [SCNPyramid pyramidWithWidth:2 height:3 length:2];
     SCNNode *node = [SCNNode nodeWithGeometry:pyramid];
     node.position = position;
+    
+    SCNMaterial *color = [SCNMaterial material];
+    color.diffuse.contents = [UIColor colorWithHue:(float)(arc4random()%100)/100.f saturation:1 brightness:1 alpha:1];
+    pyramid.materials = @[color];
+    
     [scene.rootNode addChildNode:node];
     
     [trees addObject:node];
 }
 
 - (CGFloat)randomSceneX {
-    return (float)(arc4random()%forestWidth) - forestWidth/2;
+    return cameraNode.position.x + (float)(arc4random()%forestWidth) - forestWidth/2;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,7 +173,7 @@
 - (void)updateTrees {
     NSMutableSet *treesToRemove = [NSMutableSet set];
     for (SCNNode *tree in trees) {
-        tree.position = SCNVector3Make(tree.position.x, tree.position.y, tree.position.z + ship.speed.dy);
+        tree.position = SCNVector3Make(tree.position.x, tree.position.y, tree.position.z + speed.dy);
         if (tree.position.z > 10) {
             [tree removeFromParentNode];
             [treesToRemove addObject:tree];
@@ -142,9 +183,25 @@
     [trees minusSet:treesToRemove];
 }
 
+- (SCNNode *)hitTree {
+    CGFloat dist = 0.3;
+    for (SCNNode *tree in trees) {
+        CGFloat zDiff = cameraNode.position.z - tree.position.z;
+        if (ABS(cameraNode.position.x - tree.position.x) < dist && zDiff < .4 + speed.dy && zDiff > 0) {
+            return tree;
+        }
+    }
+    
+    return nil;
+}
+
 #pragma mark controls
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (gameOver) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    
     lastTouchPosition = [[touches anyObject] locationInView:sceneView];
 }
 
@@ -152,20 +209,9 @@
     CGPoint touchPosition = [[touches anyObject] locationInView:sceneView];
     CGFloat difference = touchPosition.x - lastTouchPosition.x;
     
-    ship.speed = CGVectorMake(ship.speed.dx + difference / 200.f, ship.speed.dy);
+    speed = CGVectorMake(speed.dx + difference / 20.f, speed.dy);
     
     lastTouchPosition = touchPosition;
-}
-
-#pragma mark SCNSceneRendererDelegate
-
--(void)renderer:(id<SCNSceneRenderer>)aRenderer willRenderScene:(SCNScene *)scene atTime:(NSTimeInterval)time {
-    [ship update];
-    [self updateTrees];
-    
-    while (trees.count < numTrees) {
-        [self addTreeToPosition:SCNVector3Make([self randomSceneX], 0, -30)];
-    }
 }
 
 @end
