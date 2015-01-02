@@ -15,6 +15,9 @@
 		86FCEF781A561D5A00EDACC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86FCEF771A561D5A00EDACC7 /* Images.xcassets */; };
 		86FCEF7B1A561D5A00EDACC7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86FCEF791A561D5A00EDACC7 /* LaunchScreen.xib */; };
 		86FCEF871A561D5A00EDACC7 /* ForestFlyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF861A561D5A00EDACC7 /* ForestFlyTests.m */; };
+		86FCEF951A562CD500EDACC7 /* FFShip.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF941A562CD500EDACC7 /* FFShip.m */; };
+		86FCEF9A1A562E6A00EDACC7 /* FFObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF991A562E6A00EDACC7 /* FFObject.m */; };
+		86FCEF9E1A56308B00EDACC7 /* FFMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FCEF9D1A56308B00EDACC7 /* FFMotion.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +45,12 @@
 		86FCEF801A561D5A00EDACC7 /* ForestFlyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ForestFlyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86FCEF851A561D5A00EDACC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		86FCEF861A561D5A00EDACC7 /* ForestFlyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ForestFlyTests.m; sourceTree = "<group>"; };
+		86FCEF931A562CD500EDACC7 /* FFShip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFShip.h; sourceTree = "<group>"; };
+		86FCEF941A562CD500EDACC7 /* FFShip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFShip.m; sourceTree = "<group>"; };
+		86FCEF981A562E6A00EDACC7 /* FFObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFObject.h; sourceTree = "<group>"; };
+		86FCEF991A562E6A00EDACC7 /* FFObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFObject.m; sourceTree = "<group>"; };
+		86FCEF9C1A56308B00EDACC7 /* FFMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMotion.h; sourceTree = "<group>"; };
+		86FCEF9D1A56308B00EDACC7 /* FFMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMotion.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,12 +92,14 @@
 		86FCEF671A561D5A00EDACC7 /* ForestFly */ = {
 			isa = PBXGroup;
 			children = (
+				86FCEF9B1A562F8A00EDACC7 /* Objects */,
+				86FCEF9F1A56308F00EDACC7 /* Controls */,
 				86FCEF6C1A561D5A00EDACC7 /* AppDelegate.h */,
 				86FCEF6D1A561D5A00EDACC7 /* AppDelegate.m */,
-				86FCEF6F1A561D5A00EDACC7 /* art.scnassets */,
 				86FCEF711A561D5A00EDACC7 /* GameViewController.h */,
 				86FCEF721A561D5A00EDACC7 /* GameViewController.m */,
 				86FCEF741A561D5A00EDACC7 /* Main.storyboard */,
+				86FCEF6F1A561D5A00EDACC7 /* art.scnassets */,
 				86FCEF771A561D5A00EDACC7 /* Images.xcassets */,
 				86FCEF791A561D5A00EDACC7 /* LaunchScreen.xib */,
 				86FCEF681A561D5A00EDACC7 /* Supporting Files */,
@@ -120,6 +131,26 @@
 				86FCEF851A561D5A00EDACC7 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		86FCEF9B1A562F8A00EDACC7 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				86FCEF981A562E6A00EDACC7 /* FFObject.h */,
+				86FCEF991A562E6A00EDACC7 /* FFObject.m */,
+				86FCEF931A562CD500EDACC7 /* FFShip.h */,
+				86FCEF941A562CD500EDACC7 /* FFShip.m */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
+		86FCEF9F1A56308F00EDACC7 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				86FCEF9C1A56308B00EDACC7 /* FFMotion.h */,
+				86FCEF9D1A56308B00EDACC7 /* FFMotion.m */,
+			);
+			name = Controls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,9 +254,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86FCEF9A1A562E6A00EDACC7 /* FFObject.m in Sources */,
 				86FCEF6E1A561D5A00EDACC7 /* AppDelegate.m in Sources */,
 				86FCEF731A561D5A00EDACC7 /* GameViewController.m in Sources */,
+				86FCEF9E1A56308B00EDACC7 /* FFMotion.m in Sources */,
 				86FCEF6B1A561D5A00EDACC7 /* main.m in Sources */,
+				86FCEF951A562CD500EDACC7 /* FFShip.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
